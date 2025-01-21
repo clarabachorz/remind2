@@ -178,7 +178,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
 
   #process-based steel
   if ("bof" %in% magclass::getNames(vm_cap, dim = 1)) {
-    tmp <- mbind(tmp, setNames(dimSums(vm_cap[, , c("bof")], dim = 3), "Cap|Industry|Steel|BOF (Mt CO2/yr)"))
+    tmp <- mbind(tmp, setNames(dimSums(vm_cap[, , c("bof")], dim = 3), "Cap|Industry|Steel|BOF (Mt /yr)"))
   }
 
   # Newly built capacities electricity (Should all go into tmp2, so that this can be used for calculating cumulated values in tmp5 below)
@@ -284,7 +284,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
 
   #process-based steel
   if ("bof" %in% magclass::getNames(vm_cap, dim = 1)) {
-    tmp2 <- mbind(tmp2, setNames(dimSums(vm_deltaCap[, , c("bof")], dim = 3), "New Cap|Industry|Steel|BOF (Mt CO2/yr)"))
+    tmp2 <- mbind(tmp2, setNames(dimSums(vm_deltaCap[, , c("bof")], dim = 3), "New Cap|Industry|Steel|BOF (Mt /yr)"))
   }
 
   # add terms calculated from previously calculated capacity values
@@ -331,7 +331,7 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
   #process-based steel
   if ("bof" %in% magclass::getNames(vm_cap, dim = 1)) {
     tmp4 <- mbind(tmp4, setNames(dimSums(vm_cap[, , c("bof")], dim = 3) / (1 - v_earlyreti[, , c("bof")]),
-                                "Surviving Cap|Industry|Steel|BOF (Mt CO2/yr)"))
+                                "Surviving Cap|Industry|Steel|BOF (Mt /yr)"))
   }
           
   # Cumulate things on extensive time set
