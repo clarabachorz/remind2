@@ -440,6 +440,69 @@ showAreaAndBarPlots(droute, items, tot, orderVars = "user", scales = "fixed")
 }
 ```
 
+### BOF Steel capacity using process-based steel modeling
+```{r Steel BOF cap}
+if ("Production|Industry|Steel|BF-BOF" %in% levels(data$variable)) { # if process-based steel is used
+  tot <- "Cap|Industry|Steel|BOF"
+
+  #Production|Industry|Steel|+|BF-BOF
+  items <- c(
+    "Cap|Industry|Steel|BOF")
+  # Non-process based scenarios have tot variable, but not items, which leads to errors in display;
+  # Therefore, filter data by scenarios that have the 'items' variables.
+  dscens <- data %>%
+    filter(.data$variable %in% items, .data$scenario != "historical") %>%
+    droplevels() %>%
+    pull("scenario") %>%
+    unique()
+  droute <- data %>%
+    filter(.data$scenario %in% dscens)
+showAreaAndBarPlots(droute, items, tot, orderVars = "user", scales = "fixed")
+}
+```
+
+### BOF Steel capacity additions using process-based steel modeling
+```{r Steel BOF Deltacap}
+if ("Production|Industry|Steel|BF-BOF" %in% levels(data$variable)) { # if process-based steel is used
+  tot <- "New Cap|Industry|Steel|BOF"
+
+  #Production|Industry|Steel|+|BF-BOF
+  items <- c(
+    "New Cap|Industry|Steel|BOF")
+  # Non-process based scenarios have tot variable, but not items, which leads to errors in display;
+  # Therefore, filter data by scenarios that have the 'items' variables.
+  dscens <- data %>%
+    filter(.data$variable %in% items, .data$scenario != "historical") %>%
+    droplevels() %>%
+    pull("scenario") %>%
+    unique()
+  droute <- data %>%
+    filter(.data$scenario %in% dscens)
+showAreaAndBarPlots(droute, items, tot, orderVars = "user", scales = "fixed")
+}
+```
+
+### BOF Steel surviving total capacity after early retirement using process-based steel modeling
+```{r Steel BOF Deltacap}
+if ("Production|Industry|Steel|BF-BOF" %in% levels(data$variable)) { # if process-based steel is used
+  tot <- "Surviving Cap|Industry|Steel|BOF"
+
+  #Production|Industry|Steel|+|BF-BOF
+  items <- c(
+    "Surviving Cap|Industry|Steel|BOF")
+  # Non-process based scenarios have tot variable, but not items, which leads to errors in display;
+  # Therefore, filter data by scenarios that have the 'items' variables.
+  dscens <- data %>%
+    filter(.data$variable %in% items, .data$scenario != "historical") %>%
+    droplevels() %>%
+    pull("scenario") %>%
+    unique()
+  droute <- data %>%
+    filter(.data$scenario %in% dscens)
+showAreaAndBarPlots(droute, items, tot, orderVars = "user", scales = "fixed")
+}
+```
+
 ### Subsector per-Capita Production
 ```{r plot subsector per-capita production}
 items <- c("Production|Industry|Cement|per-capita",

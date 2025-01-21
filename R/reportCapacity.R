@@ -175,6 +175,12 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
   if ("dac" %in% magclass::getNames(vm_cap, dim = 1)) {
     tmp <- mbind(tmp, setNames(dimSums(vm_cap[, , c("dac")], dim = 3) * sm_c_2_co2, "Cap|Carbon Management|DAC (Mt CO2/yr)"))
   }
+
+  #process-based steel
+  if ("bof" %in% magclass::getNames(vm_cap, dim = 1)) {
+    tmp <- mbind(tmp, setNames(dimSums(vm_cap[, , c("bof")], dim = 3), "Cap|Industry|Steel|BOF (Mt CO2/yr)"))
+  }
+
   # Newly built capacities electricity (Should all go into tmp2, so that this can be used for calculating cumulated values in tmp5 below)
   tmp2 <- NULL
   tmp2 <- mbind(tmp2, setNames(dimSums(vm_deltaCap[, , c("ngcc", "ngt", "gaschp", "ngccc")], dim = 3),        "New Cap|Electricity|Gas (GW/yr)"))
@@ -276,6 +282,11 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
     tmp2 <- mbind(tmp2, setNames(dimSums(vm_deltaCap[, , c("dac")], dim = 3) * sm_c_2_co2, "New Cap|Carbon Management|DAC (Mt CO2/yr/yr)"))
   }
 
+  #process-based steel
+  if ("bof" %in% magclass::getNames(vm_cap, dim = 1)) {
+    tmp2 <- mbind(tmp2, setNames(dimSums(vm_deltaCap[, , c("bof")], dim = 3), "New Cap|Industry|Steel|BOF (Mt CO2/yr)"))
+  }
+
   # add terms calculated from previously calculated capacity values
   tmp_aux <- NULL
   tmp_aux <- mbind(tmp_aux, setNames(dimSums(tmp[, , c("Cap|Electricity|Storage|Battery|For PV (GW)", "Cap|Electricity|Storage|Battery|For Wind (GW)")], dim = 3),   "Cap|Electricity|Storage|Battery (GW)"))
@@ -311,11 +322,18 @@ reportCapacity <- function(gdx, regionSubsetList = NULL,
                                  dimSums(vm_cap[, , "ngt"], dim = 3) * v_earlyreti[, , "ngt"] / (1 - v_earlyreti[, , "ngt"]),
                                "Idle Cap|Electricity|Gas|w/o CC (GW)"))
   tmp4 <- mbind(tmp4, setNames(dimSums(vm_cap[, , "dot"], dim = 3) * v_earlyreti[, , "dot"] / (1 - v_earlyreti[, , "dot"]),
-                               "Idle Cap|Electricity|Oil|w/o CC (GW)"))
+                               "Idle Cap|Electricity|Oil|w/o CC (GW)"))                      
   tmp4 <- mbind(tmp4, setNames(tmp4[, , "Idle Cap|Electricity|Coal|w/o CC (GW)"] + tmp[, , "Cap|Electricity|Coal|w/o CC (GW)"],
                                "Total Cap|Electricity|Coal|w/o CC (GW)"))
   tmp4 <- mbind(tmp4, setNames(tmp4[, , "Idle Cap|Electricity|Gas|w/o CC (GW)"] + tmp[, , "Cap|Electricity|Gas|w/o CC (GW)"],
                                "Total Cap|Electricity|Gas|w/o CC (GW)"))
+
+  #process-based steel
+  if ("bof" %in% magclass::getNames(vm_cap, dim = 1)) {
+    tmp4 <- mbind(tmp4, setNames(dimSums(vm_cap[, , c("bof")], dim = 3) / (1 - v_earlyreti[, , c("bof")]),
+                                "Surviving Cap|Industry|Steel|BOF (Mt CO2/yr)"))
+  }
+          
   # Cumulate things on extensive time set
   tmp <- mbind(tmp, tmp7, tmp1, tmp2, tmp4)
 
